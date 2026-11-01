@@ -19,6 +19,23 @@
   font-display: swap;
   src: url("/fonts/ibm-plex-mono-latin-500.woff2") format("woff2");
 }
+/* The Latin subsets omit U+2197. Keep the Plex arrow local and avoid fallback. */
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/fonts/ibm-plex-mono-arrow-400.ttf") format("truetype");
+  unicode-range: U+2197;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("/fonts/ibm-plex-mono-arrow-500.ttf") format("truetype");
+  unicode-range: U+2197;
+}
 :root {
   color-scheme: dark;
   --surface: #0a0a09;
@@ -925,6 +942,9 @@ input[type="number"] {
 }
 .primary:hover {
   color: var(--accent-text);
+}
+.icon-arrow {
+  font-family: var(--mono);
 }
 .export-arrow {
   display: inline-block;
