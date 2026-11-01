@@ -1,0 +1,9 @@
+{
+  "status": {
+    "loadingImage": "Carregando imagem...",
+    "processed": "Processado",
+    "processing": "Processando...",
+    "sample": "amostra",
+    "saved": "Perfil salvo neste navegador."
+  }
+}

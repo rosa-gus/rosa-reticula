@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "bayerStudy": "Bayer study",
+    "contrast": "Contrast {value}",
+    "customDescription": "Custom profile. All parameters have been restored.",
+    "importedDescription": "Recipe imported. All parameters have been loaded.",
+    "levels": "{count, plural, one {# level} other {# levels}}",
+    "linear": "linear curve",
+    "pairs": "pairs {value}",
+    "rosaDense": "Dense shadows",
+    "rosaOriginal": "Rosa Original",
+    "rosaSoft": "Soft light",
+    "savedDescription": "Custom profile saved in this browser.",
+    "screen": "dither strength {value}"
+  }
+}

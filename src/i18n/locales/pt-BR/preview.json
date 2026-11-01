@@ -1,0 +1,7 @@
+{
+  "preview": {
+    "originalSize": "original: {width} × {height} px",
+    "resized": "redimensionada",
+    "splitValue": "{original}% original, {treated}% tratada"
+  }
+}

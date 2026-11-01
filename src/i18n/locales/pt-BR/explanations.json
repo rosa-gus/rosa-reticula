@@ -1,0 +1,10 @@
+{
+  "explanations": {
+    "blur": "Define, em pixels da imagem processada, o raio usado para identificar variações locais de tom na proteção de detalhes. Atua junto de Preservar detalhes; não desfoca diretamente a imagem final.",
+    "contrast": "Ajusta a diferença entre claros e escuros antes da retícula. Valores maiores separam mais os tons; valores menores aproximam claros e escuros.",
+    "duotone": "Mapeia os tons entre duas cores: Sombra nos mais escuros e Luz nos mais claros. Os tons intermediários misturam as duas. Inverter troca essas cores.",
+    "pairs": "Mistura a matriz Bayer 4×4 com o padrão de pares 16×16 da técnica Rosa. Valores maiores dão mais presença à assinatura de pares na faixa tonal definida pelo perfil. Em 0, permanece a matriz Bayer.",
+    "protection": "Reduz a retícula nas regiões com variações locais de tom, ajudando a preservar contornos e texturas. Valores maiores preservam mais a base tonal nessas regiões.",
+    "screen": "Controla a mistura entre a base tonal e a imagem reticulada. Em 0, remove a retícula; em 1, aplica toda a intensidade. O contraste, a curva e as cores continuam ativos."
+  }
+}

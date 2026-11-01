@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "bayerStudy": "Estudo Bayer",
+    "contrast": "Contraste {value}",
+    "customDescription": "Perfil personalizado. Todos os parâmetros foram restaurados.",
+    "importedDescription": "Receita importada. Todos os parâmetros foram carregados.",
+    "levels": "{count, plural, one {# nível} other {# níveis}}",
+    "linear": "curva linear",
+    "pairs": "pares {value}",
+    "rosaDense": "Sombra densa",
+    "rosaOriginal": "Rosa Original",
+    "rosaSoft": "Luz suave",
+    "savedDescription": "Perfil personalizado salvo neste navegador.",
+    "screen": "retícula {value}"
+  }
+}

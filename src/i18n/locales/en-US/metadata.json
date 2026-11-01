@@ -1,0 +1,7 @@
+{
+  "metadata": {
+    "description": "Image processing with Bayer-inspired ordered dithering, selective screening, duotone, and PNG export. All processing runs in the browser.",
+    "socialDescription": "Explore Rosa Retícula: a dithering algorithm that varies the strength and geometry of its dither pattern to create texture and rhythm in images.",
+    "title": "Rosa Retícula / Image processing"
+  }
+}

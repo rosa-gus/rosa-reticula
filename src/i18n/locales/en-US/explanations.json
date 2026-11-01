@@ -1,0 +1,10 @@
+{
+  "explanations": {
+    "blur": "Sets the radius, in processed-image pixels, used to detect local tonal variation for detail protection. Works with Preserve detail; does not directly blur the final image.",
+    "contrast": "Adjusts the difference between light and dark before screening. Higher values separate tones more; lower values bring them closer together.",
+    "duotone": "Maps tones between two colors: Shadow for the darkest and Highlight for the lightest. Intermediate tones blend both. Swap exchanges these colors.",
+    "pairs": "Blends the 4×4 Bayer matrix with the 16×16 pair pattern of the Rosa technique. Higher values emphasize the pair signature within the tonal range defined by the profile. At 0, only the Bayer matrix remains.",
+    "protection": "Reduces screening in areas with local tonal variation, helping preserve edges and textures. Higher values preserve more of the tonal base in these areas.",
+    "screen": "Controls the blend between the tonal base and the dithered image. At 0, removes the dither pattern; at 1, applies full strength. Contrast, curve, and colors remain active."
+  }
+}

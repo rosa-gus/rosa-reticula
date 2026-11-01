@@ -1,0 +1,20 @@
+[
+  {
+    "author": "Patricio Gaibor",
+    "file": "patricio-gaibor.jpg",
+    "url": "https://unsplash.com/@pgaibor",
+    "license": {
+      "name": "Unsplash Free",
+      "url": "https://unsplash.com/license"
+    }
+  },
+  {
+    "author": "Mehdi Imani",
+    "file": "mehdi-imani.jpg",
+    "url": "https://unsplash.com/@mehdiimanii",
+    "license": {
+      "name": "Unsplash Free",
+      "url": "https://unsplash.com/license"
+    }
+  }
+]

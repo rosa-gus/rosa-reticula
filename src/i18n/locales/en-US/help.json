@@ -1,0 +1,10 @@
+{
+  "help": {
+    "blur": "Help: Protection radius",
+    "contrast": "Help: Contrast",
+    "duotone": "Help: Duotone",
+    "pairs": "Help: Pair signature",
+    "protection": "Help: Preserve detail",
+    "screen": "Help: Strength"
+  }
+}

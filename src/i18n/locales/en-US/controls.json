@@ -1,0 +1,10 @@
+{
+  "controls": {
+    "blur": "Protection radius",
+    "contrast": "Contrast",
+    "duotone": "Duotone",
+    "pairs": "Pair signature",
+    "protection": "Preserve detail",
+    "screen": "Strength"
+  }
+}

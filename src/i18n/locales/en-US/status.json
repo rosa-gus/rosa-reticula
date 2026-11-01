@@ -1,0 +1,9 @@
+{
+  "status": {
+    "loadingImage": "Loading image...",
+    "processed": "Processed",
+    "processing": "Processing...",
+    "sample": "sample",
+    "saved": "Profile saved in this browser."
+  }
+}
