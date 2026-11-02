@@ -95,7 +95,7 @@ function updateDocument(): void {
 
 /** Update only bindings: canvases, controls, focus, and session state stay mounted. */
 export function localize(root: HTMLElement): void {
-  for (const node of root.querySelectorAll<HTMLElement>('[data-i18n]')) node.textContent = t(node.dataset.i18n as StaticMessageKey)
+  for (const node of root.querySelectorAll<HTMLElement>('[data-i18n]')) node.textContent = t(node.getAttribute('data-i18n') as StaticMessageKey)
   for (const attribute of ['aria-label', 'title', 'placeholder']) {
     for (const node of root.querySelectorAll<HTMLElement>(`[data-i18n-${attribute}]`))
       node.setAttribute(attribute, t(node.getAttribute(`data-i18n-${attribute}`) as StaticMessageKey))

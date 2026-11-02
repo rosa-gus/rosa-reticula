@@ -25,13 +25,13 @@ import {
 } from "../browser/image.ts";
 import { examples, sample } from "../browser/sample.ts";
 import type { Example } from "../browser/sample.ts";
-import { workbench } from "../ui/workbench.ts";
+import { mountWorkbench } from "../ui/workbench.ts";
 import { mountTooltips } from "../ui/tooltips.ts";
 import { mountSelect } from "../ui/select.ts";
 import { mountTheme } from "../ui/theme.ts";
 
 export function mount(root: HTMLElement): void {
-  root.innerHTML = workbench();
+  mountWorkbench(root);
   const disposeTooltips = mountTooltips(root);
   const el = <T extends HTMLElement>(id: string) =>
     root.querySelector<T>(`#${id}`)!;
