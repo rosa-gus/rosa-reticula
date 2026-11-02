@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "description": "Tratamento de imagem com retícula tonal inspirada em Bayer, perfis configuráveis, duotone e exportação PNG e WebP sem perdas. Todo o processamento acontece no navegador.",
+    "description": "Crie texturas com retícula tonal inspirada em Bayer, ajustes de imagem e duotone. Processe e exporte suas imagens diretamente no navegador.",
     "socialDescription": "Explore o Rosa Retícula: um algoritmo de dithering que varia a intensidade e a geometria da retícula para criar textura e ritmo na imagem.",
     "title": "Rosa Retícula / Tratamento de imagem"
   }

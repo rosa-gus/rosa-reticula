@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "description": "Image processing with Bayer-inspired ordered dithering, selective screening, duotone, and PNG and lossless WebP export. All processing runs in the browser.",
+    "description": "Create textures with Bayer-inspired ordered dithering, image adjustments, and duotone. Process and export your images directly in your browser.",
     "socialDescription": "A dithering algorithm that varies the strength and geometry of its dither pattern to create texture and rhythm in images.",
     "title": "Rosa Retícula / Image processing"
   }
