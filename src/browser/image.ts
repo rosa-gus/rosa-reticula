@@ -6,6 +6,7 @@ import {
 } from "./image-dimensions.ts";
 import type { Frame, Parameters } from "../core/types.ts";
 import { roundEven } from "../core/math.ts";
+import type { WebpResponse } from "../processing/webp.worker.ts";
 
 export async function decode(file: File): Promise<ImageBitmap> {
   if (!["image/png", "image/jpeg", "image/webp"].includes(file.type))
@@ -68,15 +69,46 @@ export function download(blob: Blob, name: string): void {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }
-export async function exportPng(
+export type ExportFormat = "png" | "webp";
+
+export async function exportImage(
   canvas: HTMLCanvasElement,
   name: string,
+  format: ExportFormat,
 ): Promise<void> {
-  const blob = await new Promise<Blob>((resolve, reject) =>
-    canvas.toBlob(
-      (b) => (b ? resolve(b) : reject(new AppError("png"))),
-      "image/png",
-    ),
-  );
+  const blob =
+    format === "webp"
+      ? await webpBlob(canvas)
+      : await new Promise<Blob>((resolve, reject) =>
+          canvas.toBlob(
+            (b) => (b ? resolve(b) : reject(new AppError("imageExport"))),
+            "image/png",
+          ),
+        );
   download(blob, name);
+}
+
+async function webpBlob(canvas: HTMLCanvasElement): Promise<Blob> {
+  const context = canvas.getContext("2d", { colorSpace: "srgb" });
+  if (!context) throw new AppError("canvas");
+  // Capture the raster before starting async work so later edits cannot change it.
+  const image = context.getImageData(0, 0, canvas.width, canvas.height);
+  const worker = new Worker(
+    new URL("../processing/webp.worker.ts", import.meta.url),
+    { type: "module" },
+  );
+  try {
+    return await new Promise<Blob>((resolve, reject) => {
+      worker.onmessage = ({ data }: MessageEvent<WebpResponse>) => {
+        if (data.type === "result")
+          resolve(new Blob([data.buffer], { type: "image/webp" }));
+        else reject(new AppError("imageExport"));
+      };
+      worker.onerror = () => reject(new AppError("imageExport"));
+      worker.onmessageerror = () => reject(new AppError("imageExport"));
+      worker.postMessage(image, [image.data.buffer]);
+    });
+  } finally {
+    worker.terminate();
+  }
 }

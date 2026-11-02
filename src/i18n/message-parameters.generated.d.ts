@@ -14,11 +14,11 @@ export type MessageParameters = {
   "errors.dimensions": never;
   "errors.fileSize": never;
   "errors.fileType": never;
+  "errors.imageExport": never;
   "errors.inputPixels": never;
   "errors.inputPixelsDetails": "height" | "megapixels" | "width";
   "errors.language": never;
   "errors.outputPixels": never;
-  "errors.png": never;
   "errors.prepare": never;
   "errors.previousImage": "message";
   "errors.processing": never;
@@ -107,9 +107,10 @@ export type MessageParameters = {
   "workbench.editor": never;
   "workbench.exampleImages": never;
   "workbench.examples": never;
-  "workbench.exportPng": never;
+  "workbench.exportImage": "format";
   "workbench.exportRecipe": never;
   "workbench.fit": never;
+  "workbench.format": never;
   "workbench.highlight": never;
   "workbench.highlightColor": never;
   "workbench.home": never;
@@ -122,6 +123,7 @@ export type MessageParameters = {
   "workbench.linear": never;
   "workbench.loadingSample": never;
   "workbench.local": never;
+  "workbench.lossless": never;
   "workbench.modified": never;
   "workbench.nineLevels": never;
   "workbench.opaque": never;
@@ -158,6 +160,7 @@ export type MessageParameters = {
   "workbench.treated": never;
   "workbench.treatedImage": never;
   "workbench.view": never;
+  "workbench.webpLossless": never;
   "workbench.width": never;
 };
 export type PluralMessages = {

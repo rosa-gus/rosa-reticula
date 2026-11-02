@@ -18,7 +18,8 @@ import { ProcessingClient } from "../processing/client.ts";
 import {
   decode,
   download,
-  exportPng,
+  exportImage,
+  type ExportFormat,
   paint,
   prepare,
 } from "../browser/image.ts";
@@ -37,8 +38,21 @@ export function mount(root: HTMLElement): void {
   const disposeTheme = mountTheme(el<HTMLButtonElement>("theme-toggle"));
   const resultCanvas = el<HTMLCanvasElement>("result-canvas"),
     originalCanvas = el<HTMLCanvasElement>("original-canvas");
-  const exportButton = el<HTMLButtonElement>("export-png"),
+  const exportButton = el<HTMLButtonElement>("export-image"),
     status = el("status");
+  const formatSelect = el<HTMLSelectElement>("export-format");
+  const formatMenu = mountSelect(formatSelect);
+  let exporting = false;
+  const selectedFormat = (): ExportFormat =>
+    formatSelect.value === "webp" ? "webp" : "png";
+  const refreshExport = () => {
+    el("export-label").textContent = t("workbench.exportImage", {
+      format: selectedFormat() === "webp" ? "WebP" : "PNG",
+    });
+    formatMenu.sync();
+    refreshOutput();
+  };
+  formatSelect.addEventListener("change", refreshExport);
   const profileSelect = el<HTMLSelectElement>("profile");
   const profileMenu = mountSelect(profileSelect),
     curveMenu = mountSelect(el<HTMLSelectElement>("curve"));
@@ -176,7 +190,7 @@ export function mount(root: HTMLElement): void {
     }
     paint(resultCanvas, response.frame);
     readyRevision = response.revision;
-    exportButton.disabled = false;
+    exportButton.disabled = exporting;
     const pendingNotice = notice;
     message(
       pendingNotice ?? (() => t("status.processed")),
@@ -199,7 +213,8 @@ export function mount(root: HTMLElement): void {
       ]);
       setMetadata(el("export-details"), [
         dimensions,
-        "PNG",
+        selectedFormat() === "webp" ? "WebP" : "PNG",
+        t("workbench.lossless"),
         t("workbench.opaque"),
       ]);
     };
@@ -585,14 +600,23 @@ export function mount(root: HTMLElement): void {
       el("actual").setAttribute("aria-pressed", String(mode === "actual"));
     });
   exportButton.addEventListener("click", async () => {
-    if (readyRevision !== revision || loading) return;
+    if (readyRevision !== revision || loading || exporting) return;
+    const format = selectedFormat();
+    exporting = true;
+    exportButton.disabled = true;
+    exportButton.setAttribute("aria-busy", "true");
     try {
-      await exportPng(
+      await exportImage(
         resultCanvas,
-        `${filename.replace(/\.[^.]+$/, "")}-rosa.png`,
+        `${filename.replace(/\.[^.]+$/, "")}-rosa.${format}`,
+        format,
       );
     } catch (error) {
-      message(() => errorMessage(error), true);
+      message(() => errorMessage(error, "imageExport"), true);
+    } finally {
+      exporting = false;
+      exportButton.disabled = readyRevision !== revision || loading;
+      exportButton.removeAttribute("aria-busy");
     }
   });
   el("export-recipe").addEventListener("click", () =>
@@ -703,7 +727,7 @@ export function mount(root: HTMLElement): void {
     syncControls();
     refreshDescription();
     refreshSource();
-    refreshOutput();
+    refreshExport();
     setSplit(splitPosition);
     renderStatus();
   });
@@ -717,6 +741,7 @@ export function mount(root: HTMLElement): void {
       disposeTooltips();
       profileMenu.dispose();
       curveMenu.dispose();
+      formatMenu.dispose();
       disposeTheme();
       languageMenu.dispose();
       unsubscribeLocale();

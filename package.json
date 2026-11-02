@@ -25,6 +25,7 @@
     "locales:check": "node scripts/generate_locale_types.mjs --check"
   },
   "dependencies": {
+    "@jsquash/webp": "^1.5.0",
     "detect-libc": "^2.1.2",
     "fdir": "^6.5.0",
     "lightningcss": "^1.33.0",

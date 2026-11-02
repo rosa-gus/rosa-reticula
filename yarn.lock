@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@jsquash/webp@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@jsquash/webp/-/webp-1.5.0.tgz#1e8ce357cde2decf4f880a8c436f8f1529cd3f48"
+  integrity sha512-KggLoj2MnRSfIqTeKe1EmbljTX2vuV7mh79k89PCL1pyqiDULcPM1L47twxXt0hkb68F70bXiL31MxsuoZtKFw==
+  dependencies:
+    wasm-feature-detect "^1.2.11"
+
 "@oxc-project/types@=0.156.0":
   version "0.156.0"
   resolved "https://registry.yarnpkg.com/@oxc-project/types/-/types-0.156.0.tgz#00e35b1ead490d81b4c7fe1dbfe35fc55e89c5e6"
@@ -375,3 +382,8 @@ vite@^8.3.5:
     tinyglobby "^0.2.17"
   optionalDependencies:
     fsevents "~2.3.3"
+
+wasm-feature-detect@^1.2.11:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/wasm-feature-detect/-/wasm-feature-detect-1.9.0.tgz#ae62b944805108fcc3b5f1e048ad2baa2d8ac2da"
+  integrity sha512-zonE+xlIIYtxPy++L24ow0hAD8CICb4+FgPyROd3buyXIqsJvUEDkBgfCCoXOd1Hu3DUr0GOfnPIdcGV+YpNaA==

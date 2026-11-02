@@ -14,9 +14,10 @@
     "editor": "Editor de imagem",
     "exampleImages": "Imagens de exemplo",
     "examples": "Exemplos",
-    "exportPng": "Exportar PNG",
+    "exportImage": "Exportar {format}",
     "exportRecipe": "[Exportar JSON]",
     "fit": "[Ajustar]",
+    "format": "Formato",
     "highlight": "Luz",
     "highlightColor": "Cor das luzes",
     "home": "Rosa Retícula, início",
@@ -29,6 +30,7 @@
     "linear": "Linear",
     "loadingSample": "Carregando amostra...",
     "local": "processamento local",
+    "lossless": "sem perdas",
     "modified": "Modificado",
     "nineLevels": "9 níveis",
     "opaque": "opaco",
@@ -65,6 +67,7 @@
     "treated": "Tratada",
     "treatedImage": "Imagem tratada",
     "view": "Modo de visualização",
+    "webpLossless": "WebP",
     "width": "Largura"
   }
 }

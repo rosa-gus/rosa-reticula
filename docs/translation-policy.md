@@ -4,8 +4,8 @@
 
 | Locale | UI coverage |
 | --- | ---: |
-| pt-BR | 100% (159/159) |
-| en-US | 100% (159/159) |
+| pt-BR | 100% (162/162) |
+| en-US | 100% (162/162) |
 
 <!-- translation-coverage:end -->
 

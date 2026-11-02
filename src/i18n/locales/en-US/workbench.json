@@ -14,9 +14,10 @@
     "editor": "Image editor",
     "exampleImages": "Example images",
     "examples": "Examples",
-    "exportPng": "Export PNG",
+    "exportImage": "Export {format}",
     "exportRecipe": "[Export JSON]",
     "fit": "[Fit]",
+    "format": "Format",
     "highlight": "Highlight",
     "highlightColor": "Highlight color",
     "home": "Rosa Retícula, home",
@@ -29,6 +30,7 @@
     "linear": "Linear",
     "loadingSample": "Loading sample...",
     "local": "local processing",
+    "lossless": "lossless",
     "modified": "Modified",
     "nineLevels": "9 levels",
     "opaque": "opaque",
@@ -65,6 +67,7 @@
     "treated": "Treated",
     "treatedImage": "Treated image",
     "view": "Preview mode",
+    "webpLossless": "WebP",
     "width": "Width"
   }
 }

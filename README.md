@@ -4,7 +4,9 @@
 
 # Rosa Retícula
 
-A browser-based image workbench for Rosa Retícula: Bayer-inspired ordered dithering, selective screening, and duotone mapping. Adjust treatment parameters, save profiles, and export PNG images or reusable JSON recipes. All image processing runs locally in your browser.
+A browser-based image workbench for Rosa Retícula: Bayer-inspired ordered dithering, selective screening, and duotone mapping. Adjust treatment parameters, save profiles, export PNG or lossless WebP images, and save reusable JSON recipes. All image processing runs locally in your browser.
+
+Lossless WebP export uses a locally bundled WebAssembly encoder in a dedicated Worker, loaded only when exporting WebP. It preserves the processed raster pixel for pixel without uploading images.
 
 ## Development
 
