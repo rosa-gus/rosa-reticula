@@ -9,7 +9,7 @@ export const errorCodes = [
   "outputPixels",
   "canvasBrowser",
   "canvas",
-  "png",
+  "imageExport",
   "sampleMissing",
   "sampleLoad",
   "workerStopped",

@@ -4,7 +4,9 @@
 
 # Rosa Retícula
 
-A browser-based image workbench for Rosa Retícula: Bayer-inspired ordered dithering, selective screening, and duotone mapping. Adjust treatment parameters, save profiles, and export PNG images or reusable JSON recipes. All image processing runs locally in your browser.
+A browser-based image workbench for Rosa Retícula: Bayer-inspired ordered dithering, selective screening, and duotone mapping. Adjust treatment parameters, save profiles, export PNG or lossless WebP images, and save reusable JSON recipes. All image processing runs locally in your browser.
+
+Lossless WebP export uses a locally bundled WebAssembly encoder in a dedicated Worker, loaded only when exporting WebP. It preserves the processed raster pixel for pixel without uploading images.
 
 ## Development
 
@@ -24,6 +26,8 @@ yarn preview  # Preview the production build
 ```
 
 The app uses TypeScript, Vite, Canvas, and a Web Worker. English and Brazilian Portuguese catalogs live in `src/i18n/locales/`. After editing translations, run `yarn locales:format` and `yarn locales:check`.
+
+Edit the workbench markup in `src/ui/workbench.html`. Its reusable control and help templates are cloned by `src/ui/workbench.ts`, which fills dynamic values and applies translations before the controller initializes interactive components. DOM tests check translation keys, controller IDs, and accessibility references without opening a browser.
 
 ## License
 

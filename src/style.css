@@ -914,6 +914,14 @@ input[type="number"] {
 .output-settings .section-label {
   margin-bottom: 10px;
 }
+.output-format {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
 .output-width {
   display: flex;
   align-items: center;

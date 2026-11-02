@@ -8,7 +8,6 @@ import { errorMessage, workerError } from '../src/i18n/errors.ts'
 import { AppError, InputImageSizeError } from '../src/core/errors.ts'
 import { original, profiles } from '../src/profiles/registry.ts'
 import { validateParameters } from '../src/profiles/schema.ts'
-import { workbench } from '../src/ui/workbench.ts'
 
 const catalog = (language: string) => {
   const directory = new URL(`../src/i18n/locales/${language}/`, import.meta.url)
@@ -114,18 +113,6 @@ test('known errors translate in the UI; unknown diagnostics never leak', async (
     assert.equal(workerError('untrusted').code, 'processing')
     assert.throws(() => validateParameters({ ...original, width: 0 }), (error: unknown) => error instanceof AppError && error.code === 'recipeWidth')
   } finally { await setLocale('en-US', { persist: false, updateUrl: false }) }
-})
-
-test('workbench uses translatable bindings and keeps language, profile, and curve selects available', async () => {
-  const english = workbench()
-  assert.match(english, /<select id="language"/)
-  assert.match(english, /<select id="profile"/)
-  assert.match(english, /<option value="linear" data-i18n="workbench.linear">Linear<\/option>/)
-  assert.doesNotMatch(english, /<option[^>]*><span/)
-  assert.match(english, /data-i18n-aria-label="workbench.treatedImage"/)
-  await setLocale('pt-BR', { persist: false, updateUrl: false })
-  try { assert.match(workbench(), /\[Abrir imagem\]/) }
-  finally { await setLocale('en-US', { persist: false, updateUrl: false }) }
 })
 
 test('oversized image errors show dimensions and the megapixel limit in both locales', async () => {
