@@ -5,6 +5,8 @@
     "duotone": "Mapeia os tons entre duas cores: Sombra nos mais escuros e Luz nos mais claros. Os tons intermediários misturam as duas. Inverter troca essas cores.",
     "pairs": "Mistura a matriz Bayer 4×4 com o padrão de pares 16×16 da técnica Rosa. Valores maiores dão mais presença à assinatura de pares na faixa tonal definida pelo perfil. Em 0, permanece a matriz Bayer.",
     "protection": "Reduz a retícula nas regiões com variações locais de tom, ajudando a preservar contornos e texturas. Valores maiores preservam mais a base tonal nessas regiões.",
+    "pulse-frequency": "Define quantos ciclos de pulsação ocorrem por segundo. Em 0,50 Hz, cada ciclo dura 2 segundos. Com o mesmo número de ciclos, aumentar a frequência encurta a animação.",
+    "pulse-intensity": "Controla quanto a pulsação clareia ou escurece as áreas afetadas. Em 0%, o efeito desaparece. Valores maiores tornam a mudança mais visível.",
     "screen": "Controla a mistura entre a base tonal e a imagem reticulada. Em 0, remove a retícula; em 1, aplica toda a intensidade. O contraste, a curva e as cores continuam ativos."
   }
 }

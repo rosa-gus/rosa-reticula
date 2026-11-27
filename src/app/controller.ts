@@ -1,3 +1,4 @@
+import { mountVideo } from "../ui/video.ts";
 import {
   t,
   locale,
@@ -31,7 +32,7 @@ import { mountSelect } from "../ui/select.ts";
 import { mountTheme } from "../ui/theme.ts";
 
 export function mount(root: HTMLElement): void {
-  mountWorkbench(root);
+  const workbench = mountWorkbench(root);
   const disposeTooltips = mountTooltips(root);
   const el = <T extends HTMLElement>(id: string) =>
     root.querySelector<T>(`#${id}`)!;
@@ -47,7 +48,7 @@ export function mount(root: HTMLElement): void {
     formatSelect.value === "webp" ? "webp" : "png";
   const refreshExport = () => {
     el("export-label").textContent = t("workbench.exportImage", {
-      format: selectedFormat() === "webp" ? "WebP" : "PNG",
+      format: video.active ? video.format.toUpperCase() : selectedFormat() === "webp" ? "WebP" : "PNG",
     });
     formatMenu.sync();
     refreshOutput();
@@ -180,6 +181,15 @@ export function mount(root: HTMLElement): void {
     curveMenu.sync();
     updateModified();
   };
+  const video = mountVideo(
+    root,
+    () => {
+      refreshExport();
+      if (!video.active) schedule();
+    },
+    (error) => message(() => errorMessage(error, "videoExport"), true),
+    workbench.setAnimationMode,
+  );
   const client = new ProcessingClient((response) => {
     if (response.revision !== revision && response.revision !== -1) return;
     if (response.type === "error") {
@@ -188,7 +198,8 @@ export function mount(root: HTMLElement): void {
       message(() => errorMessage(workerError(response.code)), true);
       return;
     }
-    paint(resultCanvas, response.frame);
+    if (!video.active) paint(resultCanvas, response.frame);
+    if (prepared) video.updateSource(prepared, recipe.parameters);
     readyRevision = response.revision;
     exportButton.disabled = exporting;
     const pendingNotice = notice;
@@ -211,11 +222,19 @@ export function mount(root: HTMLElement): void {
         "sRGB",
         ...(resized ? [t("preview.resized")] : []),
       ]);
+      if (video.active) {
+        const width = response.frame.width + (video.format === "mp4" ? response.frame.width % 2 : 0);
+        const height = response.frame.height + (video.format === "mp4" ? response.frame.height % 2 : 0);
+        setMetadata(el("export-details"), [
+          video.format.toUpperCase(),
+          `${formatNumber(width)} × ${formatNumber(height)} px`,
+          video.durationLabel,
+        ]);
+        return;
+      }
       setMetadata(el("export-details"), [
-        dimensions,
         selectedFormat() === "webp" ? "WebP" : "PNG",
-        t("workbench.lossless"),
-        t("workbench.opaque"),
+        dimensions,
       ]);
     };
     refreshOutput();
@@ -322,14 +341,8 @@ export function mount(root: HTMLElement): void {
         setMetadata(el("file-detail"), [dimensions, author]);
       };
       refreshSource();
-      root
-        .querySelectorAll<HTMLButtonElement>("[data-example]")
-        .forEach((button) => {
-          button.setAttribute(
-            "aria-pressed",
-            String(button.dataset.example === example?.file),
-          );
-        });
+      exampleSelect.value = example?.file ?? "";
+      exampleMenu.sync();
       paint(originalCanvas, prepared);
       el("canvas-wrap").style.aspectRatio =
         `${prepared.width} / ${prepared.height}`;
@@ -373,14 +386,17 @@ export function mount(root: HTMLElement): void {
       example,
     );
   };
-  for (const example of examples) {
-    const button = document.createElement("button");
-    button.textContent = `[${example.file.replace(/\.[^.]+$/, "")}]`;
-    button.dataset.example = example.file;
-    button.setAttribute("aria-pressed", "false");
-    button.addEventListener("click", () => loadSample(example));
-    el("example-list").append(button);
-  }
+  const exampleSelect = el<HTMLSelectElement>("examples");
+  for (const example of examples)
+    exampleSelect.add(new Option(example.author, example.file));
+  exampleSelect.selectedIndex = -1;
+  const exampleMenu = mountSelect(exampleSelect, {
+    label: "workbench.examples",
+    choose: (file) => {
+      const example = examples.find((item) => item.file === file);
+      if (example) loadSample(example);
+    },
+  });
   refreshProfiles();
   syncControls();
   for (const input of root.querySelectorAll<HTMLInputElement>("[data-param]")) {
@@ -470,7 +486,10 @@ export function mount(root: HTMLElement): void {
     syncControls();
     schedule();
   };
-  el("reset").addEventListener("click", resetAdjustments);
+  el("reset").addEventListener("click", () => {
+    if (video.active) video.reset();
+    resetAdjustments();
+  });
   el("modified").addEventListener("click", resetAdjustments);
   el("swap-colors").addEventListener("click", () =>
     change({
@@ -601,18 +620,22 @@ export function mount(root: HTMLElement): void {
     });
   exportButton.addEventListener("click", async () => {
     if (readyRevision !== revision || loading || exporting) return;
-    const format = selectedFormat();
+    const isVideo = video.active;
+    const format = isVideo ? video.format : selectedFormat();
+    const exportName = `${filename.replace(/\.[^.]+$/, "")}-rosa.${format}`;
     exporting = true;
     exportButton.disabled = true;
     exportButton.setAttribute("aria-busy", "true");
     try {
-      await exportImage(
-        resultCanvas,
-        `${filename.replace(/\.[^.]+$/, "")}-rosa.${format}`,
-        format,
-      );
+      if (isVideo) {
+        const blob = await video.export();
+        if (blob) download(blob, exportName);
+        message(() => t(blob ? "video.exported" : "video.cancelled"));
+      } else {
+        await exportImage(resultCanvas, exportName, format as ExportFormat);
+      }
     } catch (error) {
-      message(() => errorMessage(error, "imageExport"), true);
+      message(() => errorMessage(error, isVideo ? "videoExport" : "imageExport"), true);
     } finally {
       exporting = false;
       exportButton.disabled = readyRevision !== revision || loading;
@@ -723,10 +746,12 @@ export function mount(root: HTMLElement): void {
     localize(root);
     languageSelect.value = locale;
     languageMenu.sync();
+    exampleMenu.sync();
     refreshProfiles();
     syncControls();
     refreshDescription();
     refreshSource();
+    video.refresh();
     refreshExport();
     setSplit(splitPosition);
     renderStatus();
@@ -736,6 +761,7 @@ export function mount(root: HTMLElement): void {
   window.addEventListener("pagehide", (event) => {
     if (!event.persisted) {
       client.dispose();
+      video.dispose();
       bitmap?.close();
       clearTimeout(timer);
       disposeTooltips();
@@ -743,6 +769,7 @@ export function mount(root: HTMLElement): void {
       curveMenu.dispose();
       formatMenu.dispose();
       disposeTheme();
+      exampleMenu.dispose();
       languageMenu.dispose();
       unsubscribeLocale();
     }

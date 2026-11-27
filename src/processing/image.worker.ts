@@ -1,3 +1,4 @@
+import { illuminate, createLightField, validatePulse, type LightField } from "../core/pulse.ts";
 import { MAX_OUTPUT_PIXELS } from "../core/image-limits.ts";
 import { AppError } from "../core/errors.ts";
 import type { Frame, GrayFrame } from "../core/types.ts";
@@ -12,6 +13,7 @@ const scope = self as unknown as {
 let source: Frame | undefined,
   sourceId = -1;
 let base: Uint8Array | undefined, treated: GrayFrame | undefined;
+let field: LightField | undefined, fieldKey = "";
 let toneKey = "",
   screenKey = "";
 scope.onmessage = ({ data }) => {
@@ -46,7 +48,21 @@ scope.onmessage = ({ data }) => {
       toneKey = nextToneKey;
       screenKey = "";
     }
+    let screeningBase = base;
+    if (data.pulse) {
+      const settings = validatePulse(data.pulse.settings);
+      const key = JSON.stringify([source.width, source.height, settings]);
+      if (!field || key !== fieldKey) {
+        field = createLightField(source.width, source.height, settings);
+        fieldKey = key;
+      }
+      const { seconds, loopDuration } = data.pulse;
+      if (!Number.isFinite(seconds) || !Number.isFinite(loopDuration) || loopDuration <= 0)
+        throw new AppError("pulseSettings");
+      screeningBase = illuminate(base, field(seconds, loopDuration), settings, seconds);
+    }
     const nextScreenKey = JSON.stringify([
+      data.pulse,
       toneKey,
       p.palette,
       p.screen,
@@ -57,7 +73,7 @@ scope.onmessage = ({ data }) => {
       p.signature,
     ]);
     if (nextScreenKey !== screenKey || !treated) {
-      treated = screenGray(base, source.width, source.height, p);
+      treated = screenGray(screeningBase, source.width, source.height, p);
       screenKey = nextScreenKey;
     }
     const frame = duotone(treated, p.shadow, p.highlight);

@@ -1,5 +1,9 @@
 // Stable codes cross the Worker boundary; only the UI translates them.
 export const errorCodes = [
+  "pulseSettings",
+  "videoExport",
+  "videoSize",
+  "mp4Unsupported",
   "storedProfiles",
   "prepare",
   "fileType",

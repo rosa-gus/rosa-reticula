@@ -9,6 +9,7 @@ import part6 from "./locales/pt-BR/preview.json" with { type: "json" };
 import part7 from "./locales/pt-BR/profiles.json" with { type: "json" };
 import part8 from "./locales/pt-BR/status.json" with { type: "json" };
 import part9 from "./locales/pt-BR/theme.json" with { type: "json" };
-import part10 from "./locales/pt-BR/workbench.json" with { type: "json" };
+import part10 from "./locales/pt-BR/video.json" with { type: "json" };
+import part11 from "./locales/pt-BR/workbench.json" with { type: "json" };
 
-export default { ...part0, ...part1, ...part2, ...part3, ...part4, ...part5, ...part6, ...part7, ...part8, ...part9, ...part10 };
+export default { ...part0, ...part1, ...part2, ...part3, ...part4, ...part5, ...part6, ...part7, ...part8, ...part9, ...part10, ...part11 };
