@@ -15,13 +15,11 @@ export function mountTheme(button: HTMLButtonElement): () => void {
 
   const apply = () => {
     const theme = preference ?? (system.matches ? "light" : "dark");
+    const label = t(theme === "dark" ? "theme.dark" : "workbench.light");
+    const action = t(theme === "dark" ? "workbench.activateLight" : "theme.activateDark");
     document.documentElement.dataset.theme = theme;
-    button.textContent =
-      theme === "dark" ? t("workbench.light") : t("theme.dark");
-    button.setAttribute(
-      "aria-label",
-      theme === "dark" ? t("workbench.activateLight") : t("theme.activateDark"),
-    );
+    button.textContent = `[${label}]`;
+    button.setAttribute("aria-label", `${label}. ${action}`);
     document
       .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
       ?.setAttribute("content", theme === "light" ? "#ffd6e0" : "#0a0a09");

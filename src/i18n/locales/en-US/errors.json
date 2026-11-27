@@ -10,6 +10,7 @@
     "inputPixels": "The image must be 60 megapixels or smaller.",
     "inputPixelsDetails": "This image is {width} × {height} pixels ({megapixels} MP) and exceeds the 60 MP limit. Reduce the image dimensions and try again.",
     "language": "Could not load the language. Try again.",
+    "mp4Unsupported": "H.264 encoding is unavailable for these dimensions in this browser. Try a smaller width or export GIF.",
     "outputPixels": "Output exceeds 16 megapixels. Reduce the processing width.",
     "prepare": "Could not prepare the image.",
     "previousImage": "{message} Previous image retained.",
@@ -17,6 +18,7 @@
     "profileLimit": "Limit of 50 local profiles reached. Export a JSON recipe.",
     "profileName": "Name the profile before saving.",
     "profileSave": "Could not save. Export the JSON recipe to keep it.",
+    "pulseSettings": "Invalid animation settings.",
     "recipeBlur": "Invalid recipe: invalid protection radius.",
     "recipeColor": "Invalid recipe: use six-digit hexadecimal colors.",
     "recipeContrast": "Invalid recipe: invalid contrast.",
@@ -46,6 +48,8 @@
     "sampleMissing": "Sample file not found.",
     "storedProfiles": "Local profiles could not be recovered.",
     "unknown": "Could not complete this operation.",
+    "videoExport": "Could not export the animation. Try a smaller width or fewer cycles.",
+    "videoSize": "Animation is too large. Reduce the width, FPS, or number of cycles.",
     "workerRestart": "Reload the page to restart processing.",
     "workerStopped": "The Worker stopped. Reload the page to continue."
   }

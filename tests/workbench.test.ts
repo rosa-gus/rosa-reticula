@@ -28,10 +28,10 @@ function mountedWorkbench() {
 
 test('HTML template mounts translated controls, metadata, and reusable help panels', () => {
   const root = mountedWorkbench()
-  for (const id of ['language', 'profile', 'curve', 'export-format'])
+  for (const id of ['language', 'examples', 'profile', 'curve', 'export-format'])
     assert.equal(root.querySelector(`#${id}`)?.tagName, 'SELECT')
   assert.equal(root.querySelector('#curve option[value="linear"]')?.textContent, 'Linear')
-  assert.equal(root.querySelector('#export-label')?.textContent, 'Export PNG')
+  assert.equal(root.querySelector('#export-label')?.textContent, 'EXPORT PNG')
   assert.equal(root.querySelector('#select-image')?.textContent.trim(), '[Open image]')
   assert.equal(root.querySelector('#result-canvas')?.getAttribute('aria-label'), 'Treated image')
   const info = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
@@ -40,7 +40,7 @@ test('HTML template mounts translated controls, metadata, and reusable help pane
   assert.equal(root.querySelector('[data-brand-image]')?.getAttribute('src'), './rosa-reticula-brand.png')
   assert.equal(root.querySelectorAll('#tone-controls input[type="range"]').length, 4)
   assert.equal(root.querySelectorAll('.advanced input[type="range"]').length, 1)
-  assert.equal(root.querySelectorAll('.tooltip-trigger').length, 6)
+  assert.equal(root.querySelectorAll('.tooltip-trigger').length, 8)
   assert.equal(root.querySelectorAll('template').length, 0)
   assert.equal(root.querySelectorAll('option span').length, 0)
   for (const id of ['contrast', 'screen', 'pairs', 'protection', 'blur']) {
@@ -94,4 +94,73 @@ test('all HTML translation keys exist and language changes preserve controls and
   } finally {
     await setLocale('en-US', { persist: false, updateUrl: false })
   }
+})
+
+
+test('media tabs and animation controls share the existing accessible workbench structure', () => {
+  const root = mountedWorkbench()
+  const image = root.querySelector('#mode-image')!
+  const video = root.querySelector('#mode-video')!
+  assert.equal(image.getAttribute('role'), 'tab')
+  assert.equal(image.getAttribute('aria-selected'), 'true')
+  assert.equal(video.getAttribute('aria-selected'), 'false')
+  assert.equal(video.getAttribute('tabindex'), '-1')
+  assert.equal(image.getAttribute('aria-controls'), video.getAttribute('aria-controls'))
+  assert.equal(root.querySelector('#editor-panel')?.getAttribute('role'), 'tabpanel')
+  for (const id of ['pulse-controls', 'playback', 'video-output', 'light-overlay'])
+    assert.ok(root.querySelector(`#${id}`)?.hasAttribute('hidden'))
+  assert.equal(root.querySelectorAll('[data-pulse]').length, 9)
+  assert.equal(root.querySelector('#pulse-frequency')?.getAttribute('data-param'), null)
+  for (const id of ['pulse-frequency', 'pulse-intensity']) {
+    assert.equal(root.querySelector(`#${id}`)?.getAttribute('aria-describedby'), `${id}-help`)
+    assert.ok(root.querySelector(`[popovertarget="${id}-help"]`))
+    assert.ok(root.querySelector(`#${id}-help [data-help-explanation]`)?.textContent)
+  }
+  assert.ok(root.querySelector('#pulse-model option[value="organic"]')?.hasAttribute('selected'))
+  assert.ok(root.querySelector('#pulse-model option[value="point"]'))
+  for (const id of ['radius', 'softness'])
+    assert.ok(root.querySelector(`#pulse-${id}`)?.closest('[data-light-model="point"]')?.hasAttribute('hidden'))
+  for (const id of ['speed', 'scale', 'complexity', 'pulsation'])
+    assert.ok(root.querySelector(`#pulse-${id}`)?.closest('[data-light-model="organic"]'))
+  for (const value of ['gif', 'mp4']) assert.ok(root.querySelector(`#video-format option[value="${value}"]`))
+  const controller = readFileSync(new URL('../src/ui/video.ts', import.meta.url), 'utf8')
+  for (const match of controller.matchAll(/\bel(?:<\w+>)?\("([\w-]+)"\)/g))
+    assert.ok(root.querySelector(`#${match[1]}`), `Missing animation element: ${match[1]}`)
+})
+
+test('settings tabs follow the media mode and retain their controls across navigation', () => {
+  const { document, window } = parseHTML('<html><body><div id="root"></div></body></html>')
+  const root = document.querySelector('#root')! as unknown as HTMLElement
+  const workbench = mountWorkbench(root)
+  const treatment = root.querySelector<HTMLButtonElement>('#tab-treatment')!
+  const pulse = root.querySelector<HTMLButtonElement>('#tab-pulse')!
+  const output = root.querySelector<HTMLButtonElement>('#tab-output')!
+  const outputPanel = root.querySelector<HTMLElement>('#output-settings')!
+  const pulsePanel = root.querySelector<HTMLElement>('#pulse-controls')!
+  const width = outputPanel.querySelector<HTMLInputElement>('#width')!
+
+  const goRight = () => {
+    const event = new window.Event('keydown', { cancelable: true })
+    Object.defineProperty(event, 'key', { value: 'ArrowRight' })
+    treatment.dispatchEvent(event)
+  }
+  assert.equal(pulse.hidden, true)
+  goRight()
+  assert.equal(output.getAttribute('aria-selected'), 'true')
+  assert.equal(outputPanel.hidden, false)
+  width.value = '800'
+
+  workbench.setAnimationMode(true)
+  assert.equal(pulse.getAttribute('aria-selected'), 'true')
+  assert.equal(pulsePanel.hidden, false)
+  assert.equal(outputPanel.hidden, true)
+  output.click()
+  assert.equal(output.getAttribute('aria-selected'), 'true')
+  assert.equal(pulsePanel.hidden, true)
+  assert.equal(outputPanel.querySelector('#width'), width)
+  assert.equal(width.value, '800')
+
+  workbench.setAnimationMode(false)
+  assert.equal(pulse.hidden, true)
+  assert.equal(treatment.getAttribute('aria-selected'), 'true')
 })

@@ -1,6 +1,9 @@
-import { locale, t } from "../i18n/runtime.ts";
+import { locale, t, type StaticMessageKey } from "../i18n/runtime.ts";
 
-export function mountSelect(select: HTMLSelectElement): {
+export function mountSelect(
+  select: HTMLSelectElement,
+  picker?: { label: StaticMessageKey; choose: (value: string) => void },
+): {
   sync: () => void;
   dispose: () => void;
 } {
@@ -34,7 +37,8 @@ export function mountSelect(select: HTMLSelectElement): {
     })
     .join(" ");
   trigger.setAttribute("aria-labelledby", `${labelIds} ${value.id}`.trim());
-  if (labelIds) menu.setAttribute("aria-labelledby", labelIds);
+  if (labelIds || picker)
+    menu.setAttribute("aria-labelledby", labelIds || value.id);
   if (select.hasAttribute("aria-describedby"))
     trigger.setAttribute(
       "aria-describedby",
@@ -69,7 +73,9 @@ export function mountSelect(select: HTMLSelectElement): {
     const bounds = trigger.getBoundingClientRect(),
       padding = 16,
       gap = 6;
-    menu.style.width = `${Math.min(bounds.width, window.innerWidth - padding * 2)}px`;
+    const triggerWidth = `${Math.min(bounds.width, window.innerWidth - padding * 2)}px`;
+    menu.style.width = picker ? "max-content" : triggerWidth;
+    if (picker) menu.style.minWidth = triggerWidth;
     const below = window.innerHeight - bounds.bottom - gap - padding;
     const above = bounds.top - gap - padding;
     const up = below < Math.min(menu.scrollHeight + 2, 240) && above > below;
@@ -108,8 +114,9 @@ export function mountSelect(select: HTMLSelectElement): {
       );
       snapshot = nextSnapshot;
     }
-    value.textContent =
-      select.selectedOptions[0]?.textContent ?? t("common.select");
+    value.textContent = picker
+      ? t(picker.label)
+      : select.selectedOptions[0]?.textContent ?? t("common.select");
     trigger.disabled = select.disabled || !enabled().length;
     Array.from(menu.children).forEach((option, index) =>
       option.setAttribute(
@@ -138,7 +145,14 @@ export function mountSelect(select: HTMLSelectElement): {
     );
   };
   const choose = (index: number) => {
-    if (!select.options[index] || select.options[index].disabled) return;
+    const option = select.options[index];
+    if (!option || option.disabled) return;
+    if (picker) {
+      close();
+      trigger.focus({ preventScroll: true });
+      picker.choose(option.value);
+      return;
+    }
     const changed = select.selectedIndex !== index;
     select.selectedIndex = index;
     close();

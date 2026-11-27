@@ -10,6 +10,7 @@
     "inputPixels": "A imagem deve ter no máximo 60 megapixels.",
     "inputPixelsDetails": "Esta imagem tem {width} × {height} pixels ({megapixels} MP) e excede o limite de 60 MP. Reduza as dimensões da imagem e tente novamente.",
     "language": "Não foi possível carregar o idioma. Tente novamente.",
+    "mp4Unsupported": "A codificação H.264 não está disponível para estas dimensões neste navegador. Tente uma largura menor ou exporte GIF.",
     "outputPixels": "A saída excede 16 megapixels. Reduza a largura de processamento.",
     "prepare": "Falha ao preparar imagem.",
     "previousImage": "{message} Imagem anterior mantida.",
@@ -17,6 +18,7 @@
     "profileLimit": "Limite de 50 perfis locais atingido. Exporte uma receita JSON.",
     "profileName": "Dê um nome ao perfil antes de salvar.",
     "profileSave": "Não foi possível salvar. Exporte a receita JSON para guardá-la.",
+    "pulseSettings": "Ajustes de animação inválidos.",
     "recipeBlur": "Receita inválida: blur.",
     "recipeColor": "Receita inválida: use cores hexadecimais com seis dígitos.",
     "recipeContrast": "Receita inválida: contraste.",
@@ -46,6 +48,8 @@
     "sampleMissing": "Arquivo de amostra não encontrado.",
     "storedProfiles": "Os perfis locais não puderam ser recuperados.",
     "unknown": "Não foi possível concluir esta operação.",
+    "videoExport": "Não foi possível exportar a animação. Tente uma largura menor ou menos ciclos.",
+    "videoSize": "A animação é grande demais. Reduza a largura, o FPS ou o número de ciclos.",
     "workerRestart": "Recarregue a página para reiniciar o processamento.",
     "workerStopped": "O Worker foi interrompido. Recarregue a página para continuar."
   }

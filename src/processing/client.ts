@@ -1,3 +1,4 @@
+import type { PulseSettings } from "../core/pulse.ts";
 import type { Frame, Parameters } from "../core/types.ts";
 import type { ProcessRequest, ProcessResponse } from "./protocol.ts";
 
@@ -6,6 +7,7 @@ interface Job {
   sourceId: number;
   frame: Frame;
   parameters: Parameters;
+  pulse?: { settings: PulseSettings; seconds: number; loopDuration: number };
 }
 export class ProcessingClient {
   private worker: Worker;
@@ -52,6 +54,7 @@ export class ProcessingClient {
       revision: job.revision,
       sourceId: job.sourceId,
       parameters: job.parameters,
+      pulse: job.pulse,
     };
     const transfers: Transferable[] = [];
     if (job.sourceId !== this.loadedSource) {

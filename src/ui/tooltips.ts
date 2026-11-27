@@ -8,7 +8,7 @@ export function mountTooltips(root: HTMLElement): () => void {
     const anchor = trigger.getBoundingClientRect(),
       box = panel.getBoundingClientRect();
     const padding = 16,
-      gap = 18;
+      gap = 6;
     const left = Math.max(
       padding,
       Math.min(
@@ -21,11 +21,6 @@ export function mountTooltips(root: HTMLElement): () => void {
     const top = above ? anchor.top - gap - box.height : anchor.bottom + gap;
     panel.style.left = `${left}px`;
     panel.style.top = `${Math.max(padding, Math.min(window.innerHeight - box.height - padding, top))}px`;
-    panel.style.setProperty(
-      "--stem-x",
-      `${Math.max(16, Math.min(box.width - 16, anchor.left + anchor.width / 2 - left))}px`,
-    );
-    panel.dataset.side = above ? "top" : "bottom";
     panel.dataset.positioned = "true";
   };
   const reposition = () => {
